@@ -47,6 +47,6 @@ const handler = createMcpHandler((server) => {
     async () => json(await opStats()));
   server.tool('bar_opinions', 'State bar AI ethics opinions; optional state filter.', { state: z.string().optional() },
     async (a) => json(await opBar(a.state)));
-});
+}, {}, { basePath: '/api' });
 
 export { handler as GET, handler as POST };
