@@ -15,6 +15,10 @@ describe('query parity with the CLI', () => {
     expect(applyFilters(RECS, { court: 'sdny' }).map(r => r.id)).toEqual([0, 1]);
     expect(courtMatch('U.S. District Court, Southern District of New York', 'S.D.N.Y.')).toBe(true);
     expect(courtMatch('N.D. Cal.', 'S.D.N.Y.')).toBe(false);
+    // a district alias must not leak into specialized courts
+    expect(courtMatch('Bankr. S.D.N.Y.', 'sdny')).toBe(false);
+    expect(courtMatch('2d Cir.', 'sdny')).toBe(false);
+    expect(courtMatch('Bankr. S.D.N.Y.', 'bankr')).toBe(true);
   });
   it('judge match is title-insensitive', () => {
     expect(judgeMatch('Chief Judge Nina Y. Wang', 'Wang')).toBe(true);

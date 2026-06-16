@@ -65,7 +65,14 @@ export function courtMatch(court: any, query: any): boolean {
   if (!query) return true;
   if (canonCourt(court) === canonCourt(query)) return true;
   const nq = ncourt(query), nc = ncourt(court);
-  return !!nq && nc.includes(nq);
+  if (!nq) return false;
+  // A plain district alias ("sdny") must not leak into specialized courts
+  // (bankruptcy/appeals) via substring — those are distinct courts.
+  const lowC = String(court ?? '').toLowerCase();
+  if (COURT_ALIASES[nq] && (lowC.includes('bankr') || lowC.includes('court of appeals') || lowC.includes('appellate'))) {
+    return false;
+  }
+  return nc.includes(nq);
 }
 
 function njudge(j: any): string {

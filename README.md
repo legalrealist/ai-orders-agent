@@ -14,9 +14,9 @@ Claude-Code skill — this one is purely the agent surface) and caches it in mem
 
 ## Data source
 
-Set `ORDERS_DATA_BASE` to where the explorer publishes `explorer_data.json` and
-`bar_opinions.json`. Defaults to the explorer repo's GitHub raw data dir; point it
-at `https://legalhack.io/data` once that's deployed. See `.env.example`.
+Set `ORDERS_DATA_BASE` to where the dataset (`explorer_data.json` and
+`bar_opinions.json`) is published. Defaults to the live published copy at
+`https://legalhack.io/data` (943 records). See `.env.example`.
 
 ## Endpoints
 

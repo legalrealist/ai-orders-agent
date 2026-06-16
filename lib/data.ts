@@ -3,8 +3,7 @@
 // JSON — e.g. https://legalhack.io/data or the GitHub raw base of the data files.
 import type { Record_ } from './orders';
 
-const BASE = process.env.ORDERS_DATA_BASE
-  || 'https://raw.githubusercontent.com/legalrealist/AI-orders-explorer/main/charts/data';
+const BASE = process.env.ORDERS_DATA_BASE || 'https://legalhack.io/data';
 const TTL_MS = Number(process.env.ORDERS_CACHE_TTL_MS ?? 10 * 60 * 1000);
 
 type CacheEntry = { at: number; data: any };
