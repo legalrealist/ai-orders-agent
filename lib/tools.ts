@@ -5,7 +5,7 @@
 // mcp-handler schema or wrapped in z.object() for the AI SDK) and a `run` that
 // calls the matching in-process operation in lib/api.ts.
 import { z } from 'zod';
-import { opSearch, opGet, opFacets, opStats, opPdf, opBar, type SearchArgs } from './api';
+import { opSearch, opGet, opFacets, opStats, opPdf, opBar, opText, type SearchArgs } from './api';
 
 // Shared filter shape, mirrored from the dataset's CLI/MCP surface. Bounded
 // where it matters (KTD-6): the model picks values, never raw queries.
@@ -59,9 +59,16 @@ export const TOOL_SPECS: ToolSpec[] = [
   },
   {
     name: 'get_pdf',
-    description: 'Self-hosted PDF URL + source links for a record id.',
+    description: 'Self-hosted PDF URL + machine-readable text_url + source links for a record id.',
     inputShape: { id: ID },
     run: (a: { id: string | number }) => opPdf(a.id),
+  },
+  {
+    name: 'get_text',
+    description:
+      'Full document text (light markdown) of the self-hosted order/opinion for a record id — the actual court document, not just the summary. Use this to read requirements, quotes, and reasoning verbatim. Optional max to cap characters.',
+    inputShape: { id: ID, max: z.number().int().min(500).max(200_000).optional() },
+    run: (a: { id: string | number; max?: number }) => opText(a.id, a.max),
   },
   {
     name: 'facets',

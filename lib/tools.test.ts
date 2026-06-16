@@ -6,7 +6,7 @@ describe('TOOL_SPECS', () => {
   it('covers every operation with a uniquely-named, described tool', () => {
     const names = TOOL_SPECS.map((s) => s.name).sort();
     expect(names).toEqual(
-      ['bar_opinions', 'facets', 'get_order', 'get_pdf', 'list_orders', 'search_orders', 'stats'].sort(),
+      ['bar_opinions', 'facets', 'get_order', 'get_pdf', 'get_text', 'list_orders', 'search_orders', 'stats'].sort(),
     );
     expect(new Set(names).size).toBe(names.length);
     for (const s of TOOL_SPECS) {
