@@ -21,7 +21,7 @@ export function getModel(): LanguageModel {
   switch (PROVIDER) {
     case 'openrouter': {
       const openrouter = createOpenRouter({ apiKey: need('OPENROUTER_API_KEY') });
-      return openrouter(process.env.OPENROUTER_MODEL || 'deepseek/deepseek-chat');
+      return openrouter(process.env.OPENROUTER_MODEL || 'deepseek/deepseek-v4-flash');
     }
     case 'anthropic': {
       const anthropic = createAnthropic({ apiKey: need('ANTHROPIC_API_KEY') });
