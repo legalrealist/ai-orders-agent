@@ -26,8 +26,8 @@ export async function opPdf(id: string | number) {
   return { id: rec.id, pdf: rec.pdf ?? '', link: rec.link ?? '', original_link: rec.original_link ?? '' };
 }
 
-export async function opFacets(field: string, limit?: number, all = false) {
-  return q.facet(await loadOrders(), field, limit, all);
+export async function opFacets(field: string, limit?: number, all = false, filters: q.Filters = {}) {
+  return q.facet(q.applyFilters(await loadOrders(), filters), field, limit, all);
 }
 
 export async function opStats() {

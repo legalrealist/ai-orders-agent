@@ -1,5 +1,5 @@
 import { opFacets } from '@/lib/api';
-import { json } from '@/lib/http';
+import { parseSearchArgs, json } from '@/lib/http';
 
 export async function GET(req: Request) {
   const sp = new URL(req.url).searchParams;
@@ -7,5 +7,5 @@ export async function GET(req: Request) {
   if (!field) return json({ error: 'field is required' }, 400);
   const limit = sp.has('limit') ? Number(sp.get('limit')) : undefined;
   const all = sp.has('all');
-  return json(await opFacets(field, limit, all));
+  return json(await opFacets(field, limit, all, parseSearchArgs(sp)));
 }

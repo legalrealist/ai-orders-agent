@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { search, applyFilters, facet, courtMatch, judgeMatch, appliesMatch, stats } from './orders';
+import { search, applyFilters, facet, courtMatch, judgeMatch, appliesMatch, stats, project, LIST_FIELDS } from './orders';
 
 const RECS = [
   { id: 0, name: 'D. Mass. – Judge Leo T. Sorokin', judge: 'Judge Leo T. Sorokin', court: 'S.D.N.Y.', state: 'New York', date: '2026-05-12', type: 'Judicial Opinion', consequence: 'sanctions_attorney', applies_to: 'Attorneys,Pro Se Litigants', summary: 'used ChatGPT with hallucinated citations', pdf: 'x', applicableTo: ['Generative AI Usage'] },
@@ -40,5 +40,37 @@ describe('query parity with the CLI', () => {
     expect(s.total).toBe(3);
     expect(s.with_pdf).toBe(1);
     expect(s.date_range).toEqual(['2025-01-15', '2026-05-12']);
+  });
+});
+
+describe('CLI parity: --requires, filter-aware facets, summary projection', () => {
+  const REQ = [
+    { id: 0, court: 'N.D. Cal.', type: 'Standing Order', reqs: { disclose: true } },
+    { id: 1, court: 'N.D. Cal.', type: 'Standing Order', reqs: { disclose: false } },
+    { id: 2, court: 'S.D.N.Y.', type: 'Judicial Opinion', reqs: { rules: 'FRCP 11' } },
+    { id: 3, court: 'D. Mass.', type: 'Standing Order', reqs: {} },
+    { id: 4, court: 'D. Mass.', type: 'Standing Order' }, // no reqs key
+  ];
+
+  it('requires matches only truthy reqs values', () => {
+    expect(applyFilters(REQ, { requires: 'disclose' }).map(r => r.id)).toEqual([0]);
+  });
+  it('requires treats string values as truthy', () => {
+    expect(applyFilters(REQ, { requires: 'rules' }).map(r => r.id)).toEqual([2]);
+  });
+  it('requires: unknown key matches nothing, missing reqs does not throw', () => {
+    expect(applyFilters(REQ, { requires: 'nonexistent' })).toEqual([]);
+    expect(applyFilters(REQ, { requires: 'disclose' }).map(r => r.id)).toEqual([0]);
+  });
+  it('requires composes with other filters', () => {
+    expect(applyFilters(REQ, { type: 'Standing Order', requires: 'disclose' }).map(r => r.id)).toEqual([0]);
+  });
+  it('facets over a filtered subset (filter-aware facets)', () => {
+    const sub = applyFilters(REQ, { requires: 'disclose' });
+    expect(facet(sub, 'court')).toEqual([{ value: 'N.D. Cal.', count: 1 }]);
+  });
+  it('summary is in the projection', () => {
+    expect(LIST_FIELDS).toContain('summary');
+    expect(project(RECS[0]).summary).toBe('used ChatGPT with hallucinated citations');
   });
 });

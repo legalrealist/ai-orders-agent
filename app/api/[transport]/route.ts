@@ -21,6 +21,7 @@ const FILTERS = {
   date_to: z.string().optional().describe('YYYY-MM-DD'),
   has_pdf: z.boolean().optional(),
   has_link: z.boolean().optional(),
+  requires: z.string().optional().describe('only records whose reqs[KEY] is set, e.g. disclose, certify_if_ai, certify_all, verify, prohibited, proprietary'),
 };
 
 const handler = createMcpHandler((server) => {
@@ -40,9 +41,9 @@ const handler = createMcpHandler((server) => {
     async (a) => json(await opGet(a.id)));
   server.tool('get_pdf', 'Self-hosted PDF URL + source links for a record id.', { id: z.union([z.string(), z.number()]) },
     async (a) => json(await opPdf(a.id)));
-  server.tool('facets', 'Distinct values + counts for a field (e.g. judge, court, state, type, consequence). Drops court-wide placeholders unless all=true.',
-    { field: z.string(), limit: z.number().optional(), all: z.boolean().optional() },
-    async (a) => json(await opFacets(a.field, a.limit, a.all)));
+  server.tool('facets', 'Distinct values + counts for a field (e.g. judge, court, state, type, consequence). Honors all search/list filters, so facets(field=court, consequence=sanctions_attorney) ranks courts by attorney-sanction count. Drops court-wide placeholders unless all=true.',
+    { field: z.string(), limit: z.number().optional(), all: z.boolean().optional(), ...FILTERS },
+    async (a) => json(await opFacets(a.field, a.limit, a.all, a)));
   server.tool('stats', 'Dataset summary counts (totals by type/consequence/source, pdf coverage, date range).', {},
     async () => json(await opStats()));
   server.tool('bar_opinions', 'State bar AI ethics opinions; optional state filter.', { state: z.string().optional() },

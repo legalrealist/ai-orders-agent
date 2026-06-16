@@ -5,7 +5,7 @@
 export type Record_ = Record<string, any>;
 
 export const LIST_FIELDS = [
-  'id', 'date', 'state', 'type', 'court', 'judge', 'consequence', 'name', 'pdf', 'link',
+  'id', 'date', 'state', 'type', 'court', 'judge', 'consequence', 'name', 'summary', 'pdf', 'link',
 ];
 
 const EXACT: Record<string, string> = {
@@ -112,7 +112,7 @@ export function search(records: Record_[], query?: string): Record_[] {
 export interface Filters {
   judge?: string; court?: string; state?: string; type?: string; consequence?: string;
   ai_type?: string; applies_to?: string; source?: string; jurisdiction?: string; tag?: string;
-  date_from?: string; date_to?: string; has_pdf?: boolean; has_link?: boolean;
+  date_from?: string; date_to?: string; has_pdf?: boolean; has_link?: boolean; requires?: string;
 }
 
 export function applyFilters(records: Record_[], f: Filters): Record_[] {
@@ -129,6 +129,7 @@ export function applyFilters(records: Record_[], f: Filters): Record_[] {
     if (f.date_to && d > f.date_to) return false;
     if (f.has_pdf && !r.pdf) return false;
     if (f.has_link && !r.link) return false;
+    if (f.requires && !(r.reqs ?? {})[f.requires]) return false;
     if (f.tag && !(Array.isArray(r.applicableTo) &&
         r.applicableTo.some((t: string) => norm(t).includes(norm(f.tag))))) return false;
     return true;

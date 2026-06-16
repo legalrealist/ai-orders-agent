@@ -9,6 +9,7 @@ export function parseSearchArgs(sp: URLSearchParams): SearchArgs {
     judge: s('judge'), court: s('court'), state: s('state'), type: s('type'),
     consequence: s('consequence'), ai_type: s('ai_type'), applies_to: s('applies_to'),
     source: s('source'), jurisdiction: s('jurisdiction'), tag: s('tag'),
+    requires: s('requires'),
     date_from: s('date_from'), date_to: s('date_to'),
     has_pdf: sp.has('has_pdf') ? BOOL(sp.get('has_pdf')) : undefined,
     has_link: sp.has('has_link') ? BOOL(sp.get('has_link')) : undefined,

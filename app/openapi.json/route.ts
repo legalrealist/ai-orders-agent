@@ -13,6 +13,7 @@ const FILTER_PARAMS = [
   ['source', 'rg | rails | both'],
   ['jurisdiction', 'US | Canada | UK | New Zealand'],
   ['tag', 'applicableTo tag substring'],
+  ['requires', 'only records whose reqs[KEY] is set, e.g. disclose, certify_if_ai, certify_all, verify, prohibited, proprietary'],
   ['date_from', 'YYYY-MM-DD'],
   ['date_to', 'YYYY-MM-DD'],
 ].map(([name, description]) => ({ name, in: 'query', schema: { type: 'string' }, description }));
@@ -56,11 +57,14 @@ export function GET(req: Request) {
       },
       '/api/facets': {
         get: {
-          operationId: 'facets', summary: 'Distinct values + counts for a field.',
+          operationId: 'facets', summary: 'Distinct values + counts for a field. Honors all search/list filters (e.g. field=court&consequence=sanctions_attorney ranks courts by attorney-sanction count).',
           parameters: [
             { name: 'field', in: 'query', required: true, schema: { type: 'string' }, description: 'judge | court | state | type | consequence | ai_type' },
             { name: 'limit', in: 'query', schema: { type: 'integer' } },
             { name: 'all', in: 'query', schema: { type: 'boolean' }, description: 'include court-wide placeholders' },
+            ...FILTER_PARAMS,
+            { name: 'has_pdf', in: 'query', schema: { type: 'boolean' } },
+            { name: 'has_link', in: 'query', schema: { type: 'boolean' } },
           ],
           responses: { '200': { description: 'value/count pairs' } },
         },

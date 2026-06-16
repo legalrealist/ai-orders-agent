@@ -25,13 +25,19 @@ Set `ORDERS_DATA_BASE` to where the dataset (`explorer_data.json` and
 | `GET /api/search?q=&<filters>&limit=&full=&count=` | full-text search + filters |
 | `GET /api/list?<filters>` | filter without a text query |
 | `GET /api/record/{id}` · `GET /api/pdf/{id}` | one record · its PDF/links |
-| `GET /api/facets?field=&limit=&all=` | distinct values + counts |
+| `GET /api/facets?field=&limit=&all=&<filters>` | distinct values + counts (honors all search/list filters) |
 | `GET /api/stats` · `GET /api/bar?state=` | summary · state-bar opinions |
 | `GET /api/mcp` · `GET /openapi.json` | MCP endpoint · OpenAPI spec |
 
-**Filters** (search/list): `judge` (title-insensitive), `court` (alias-aware: `sdny`/`S.D.N.Y.`/full name),
+**Filters** (search/list/facets): `judge` (title-insensitive), `court` (alias-aware: `sdny`/`S.D.N.Y.`/full name),
 `state`, `type`, `consequence`, `ai_type`, `applies_to` (multi-value), `source`, `jurisdiction`,
-`tag`, `date_from`, `date_to`, `has_pdf`, `has_link`.
+`tag`, `requires`, `date_from`, `date_to`, `has_pdf`, `has_link`.
+
+`requires=<key>` matches records whose `reqs[key]` is set — `disclose` (~128), `certify_if_ai` (~106),
+`verify`, `prohibited`, `certify_all`, `proprietary` — answering "which courts require AI disclosure / a
+certification?". Because `facets` honors every filter, `facets?field=court&consequence=sanctions_attorney`
+ranks courts by attorney-sanction count and `facets?field=court&requires=disclose` ranks them by disclosure
+requirements. The compact projection includes `summary`.
 
 ## Run / deploy
 
