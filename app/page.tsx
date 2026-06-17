@@ -24,20 +24,24 @@ export default async function Home() {
   return (
     <main className="wrap">
       <section className="hero">
-        <p className="eyebrow rise d1">U.S. courts · AI in legal filings</p>
+        <p className="eyebrow rise d1">An API &amp; MCP server for LLMs · AI in legal filings</p>
         <h1 className="rise d2">
           Every order where AI <em>met</em> the bench.
         </h1>
         <p className="lead rise d3">
-          A searchable record of {fmt(total)} U.S. court orders and opinions on AI use in legal
-          filings — judges sanctioning hallucinated citations, AI standing orders, disclosure rules,
-          and state-bar AI ethics opinions. Read the full text of each order, not just a summary.
+          A machine-readable record of {fmt(total)} U.S. court orders and opinions on AI use in legal
+          filings — sanctions for hallucinated citations, AI standing orders, disclosure rules, and
+          state-bar ethics opinions. Built for LLMs and coding agents: query it as tools and read the
+          full text of each order, not just a summary.
         </p>
         <div className="cta-row rise d4">
-          <a href="/chat" className="btn">Chat with the dataset →</a>
-          <a href="https://legalhack.io/explorer/charts/dist/index.html#cat=0" target="_blank" rel="noreferrer" className="btn-ghost">Browse the visual explorer ↗</a>
+          <a href="#connect" className="btn">Connect your LLM ↓</a>
+          <a href="/chat" className="btn-ghost">Try the chat demo →</a>
         </div>
-        <p className="hint rise d4" style={{ marginTop: 12 }}>Ask in plain English — no setup, no key. Prefer charts? Explore the dataset visually.</p>
+        <p className="hint rise d4" style={{ marginTop: 12 }}>
+          This is a tool surface for AI assistants. The chat is a courtesy demo (funded, rate-limited).
+          Browsing as a human? Open the <a href="https://legalhack.io/explorer/charts/dist/index.html#cat=0" target="_blank" rel="noreferrer">visual Explorer ↗</a> in the top bar.
+        </p>
 
         <div className="stats rise d5">
           <div className="stat"><div className="num">{fmt(total)}</div><div className="lbl">orders &amp; opinions</div></div>
@@ -47,10 +51,10 @@ export default async function Home() {
         </div>
       </section>
 
-      <section>
+      <section id="connect" style={{ scrollMarginTop: 24 }}>
         <div className="section-head">
           <h2>Connect your own LLM</h2>
-          <p>Prefer your own assistant? Point it at the same tools. Pick your client and follow the steps — copy the URL, paste it in, done.</p>
+          <p>This is the main event — point your assistant at the tools. Pick your client and follow the steps: copy the URL, paste it in, done.</p>
         </div>
         <div className="guides">
           <div className="guide">
