@@ -81,3 +81,7 @@ vercel deploy      # or push to a Vercel-connected GitHub repo
 
 Query behavior (court aliasing, title-insensitive judge match, multi-value
 `applies_to`, facet placeholder handling) mirrors the explorer's `orders` CLI.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
