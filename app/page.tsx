@@ -101,13 +101,13 @@ export default async function Home() {
           <p>Read-only JSON. Click any line to copy.</p>
         </div>
         <div className="endpoints">
-          <CopyField value={`${base}/api/search?q=hallucinated&consequence=sanctions_attorney`} display="/api/search?q=hallucinated&consequence=sanctions_attorney" />
-          <CopyField value={`${base}/api/list?court=sdny&consequence=sanctions_attorney&count=1`} display="/api/list?court=sdny&consequence=sanctions_attorney&count=1" />
-          <CopyField value={`${base}/api/record/1`} display="/api/record/{id}" />
-          <CopyField value={`${base}/api/text/1`} display="/api/text/{id}  · full order text" />
-          <CopyField value={`${base}/api/facets?field=judge&limit=20`} display="/api/facets?field=judge&limit=20" />
-          <CopyField value={`${base}/api/stats`} display="/api/stats" />
-          <CopyField value={`${base}/api/bar?state=California`} display="/api/bar?state=California" />
+          <CopyField value={`${base}/api/search?q=hallucinated&consequence=sanctions_attorney`} />
+          <CopyField value={`${base}/api/list?court=sdny&consequence=sanctions_attorney&count=1`} />
+          <CopyField value={`${base}/api/record/1`} />
+          <CopyField value={`${base}/api/text/1`} />
+          <CopyField value={`${base}/api/facets?field=judge&limit=20`} />
+          <CopyField value={`${base}/api/stats`} />
+          <CopyField value={`${base}/api/bar?state=California`} />
         </div>
       </section>
 
