@@ -7,12 +7,36 @@ export default function Home() {
         judges sanctioning hallucinated citations, AI standing orders, disclosure
         rules, and state-bar AI ethics opinions.
       </p>
-      <h2>For Claude (and any MCP client)</h2>
-      <p>Add this as a custom connector:</p>
-      <pre><code>/api/mcp</code></pre>
-      <h2>For ChatGPT (Actions) / any LLM</h2>
-      <p>Import the OpenAPI spec:</p>
-      <pre><code>/openapi.json</code></pre>
+
+      <p style={{ margin: '20px 0' }}>
+        <a
+          href="/chat"
+          style={{
+            display: 'inline-block', padding: '10px 20px', fontSize: 16, fontWeight: 600,
+            background: '#06c', color: '#fff', borderRadius: 6, textDecoration: 'none',
+          }}
+        >
+          💬 Chat with the dataset →
+        </a>{' '}
+        <span style={{ color: '#666' }}>Ask in plain English — no setup.</span>
+      </p>
+
+      <h2>Connect your own assistant</h2>
+      <p>The same data, queryable from your own LLM client:</p>
+      <ul>
+        <li>
+          <strong>Claude</strong> (Desktop or claude.ai) — add a custom connector pointing at{' '}
+          <code>/api/mcp</code> (MCP).
+        </li>
+        <li>
+          <strong>ChatGPT</strong> — create a GPT → Actions → import <code>/openapi.json</code>.
+        </li>
+        <li>
+          <strong>Any LLM / code</strong> — call the REST endpoints, or use the OpenAPI spec for
+          function-calling.
+        </li>
+      </ul>
+
       <h2>REST</h2>
       <ul>
         <li><code>/api/search?q=hallucinated&amp;consequence=sanctions_attorney</code></li>
