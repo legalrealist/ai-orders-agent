@@ -1,6 +1,8 @@
 # ai-orders-agent
 
-![Real responses from the running server: GET /api/stats returns 929 orders broken down by type and consequence; a search for "immigration" surfaces a 9th Circuit order warning about a hallucinated block quotation; and the MCP endpoint lists its tools](assets/demo.gif)
+![Scroll-through of the live site at ai-orders-agent.vercel.app: the landing page ("Every order where AI met the bench"), headline stats (929 orders, 297 attorney sanctions, 631 with full text), the "Connect your own LLM" MCP / ChatGPT setup steps, and the /chat demo](assets/demo.gif)
+
+*The live deployment at **[ai-orders-agent.vercel.app](https://ai-orders-agent.vercel.app)**.*
 
 Agent-facing service for the **AI Court Orders** dataset — one Vercel project that
 exposes the same queries four ways:
