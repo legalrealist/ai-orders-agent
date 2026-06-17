@@ -18,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <a href="/" className="brand"><span className="seal">§</span> AI Court Orders</a>
           <nav className="nav-links">
             <a href="/chat">Chat</a>
+            <a href="https://legalhack.io/explorer/charts/dist/index.html#cat=0" target="_blank" rel="noreferrer">Explorer ↗</a>
             <a href="/openapi.json">API spec</a>
             <a href="/api/stats">Stats</a>
           </nav>
