@@ -32,7 +32,7 @@ export async function opPdf(id: string | number) {
 const textUrl = (pdf: string) => (pdf ? pdf.replace(/\.pdf$/, '.txt') : '');
 
 // Full document text (light markdown) of the self-hosted order/opinion, for
-// LLM reading. Derived from the self-hosted PDF (<key>.pdf -> <key>.md).
+// LLM reading. Derived from the self-hosted PDF (<key>.pdf -> <key>.txt).
 export async function opText(id: string | number, max?: number) {
   const rec = (await loadOrders()).find((r) => String(r.id) === String(id));
   if (!rec) return { error: `no record with id ${id}` };
