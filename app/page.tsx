@@ -35,8 +35,9 @@ export default async function Home() {
         </p>
         <div className="cta-row rise d4">
           <a href="/chat" className="btn">Chat with the dataset →</a>
-          <span className="hint">Ask in plain English — no setup, no key.</span>
+          <a href="https://legalhack.io/explorer/charts/dist/index.html#cat=0" target="_blank" rel="noreferrer" className="btn-ghost">Browse the visual explorer ↗</a>
         </div>
+        <p className="hint rise d4" style={{ marginTop: 12 }}>Ask in plain English — no setup, no key. Prefer charts? Explore the dataset visually.</p>
 
         <div className="stats rise d5">
           <div className="stat"><div className="num">{fmt(total)}</div><div className="lbl">orders &amp; opinions</div></div>
@@ -108,7 +109,7 @@ export default async function Home() {
 
       <div className="foot">
         <span>AI Court Orders · read-only dataset API</span>
-        <span><a href="/chat">Chat</a> · <a href="/openapi.json">OpenAPI</a> · <a href="/api/mcp">MCP</a></span>
+        <span><a href="/chat">Chat</a> · <a href="https://legalhack.io/explorer/charts/dist/index.html#cat=0" target="_blank" rel="noreferrer">Explorer</a> · <a href="/openapi.json">OpenAPI</a> · <a href="/api/mcp">MCP</a></span>
       </div>
     </main>
   );

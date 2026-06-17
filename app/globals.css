@@ -85,6 +85,13 @@ code, .mono { font-family: var(--font-mono), ui-monospace, monospace; font-size:
 }
 .btn:hover { background: var(--oxblood-deep); color: #fff; transform: translateY(-2px); box-shadow: var(--shadow-lg); }
 .btn:active { transform: translateY(0); }
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 20px; font-size: 15px; font-weight: 600; font-family: var(--font-sans), sans-serif;
+  color: var(--oxblood); background: transparent; border: 1px solid var(--line); border-radius: 999px;
+  text-decoration: none; cursor: pointer; transition: border-color .15s ease, background .15s ease, transform .15s ease;
+}
+.btn-ghost:hover { border-color: var(--oxblood); background: var(--paper-2); transform: translateY(-2px); }
 .hint { color: var(--ink-faint); font-size: 14px; }
 
 /* ---- Stat band ---- */
