@@ -1,49 +1,115 @@
-export default function Home() {
+import { headers } from 'next/headers';
+import { opStats } from '@/lib/api';
+import CopyField from './CopyField';
+
+const fmt = (n: number) => n.toLocaleString('en-US');
+
+export default async function Home() {
+  const h = await headers();
+  const host = h.get('x-forwarded-host') ?? h.get('host') ?? 'localhost:3000';
+  const proto = h.get('x-forwarded-proto') ?? (host.startsWith('localhost') ? 'http' : 'https');
+  const base = `${proto}://${host}`;
+
+  let stats: Awaited<ReturnType<typeof opStats>> | null = null;
+  try {
+    stats = await opStats();
+  } catch {
+    stats = null;
+  }
+  const total = stats?.total ?? 929;
+  const sanctions = stats?.by_consequence?.sanctions_attorney ?? 297;
+  const withText = stats?.with_pdf ?? 608;
+  const years = stats?.date_range ? `${stats.date_range[0].slice(0, 4)}–${stats.date_range[1].slice(0, 4)}` : '2023–2026';
+
   return (
-    <main>
-      <h1>AI Court Orders API</h1>
-      <p>
-        Query 900+ U.S. court orders &amp; opinions on AI use in legal filings —
-        judges sanctioning hallucinated citations, AI standing orders, disclosure
-        rules, and state-bar AI ethics opinions.
-      </p>
+    <main className="wrap">
+      <section className="hero">
+        <p className="eyebrow rise d1">U.S. courts · AI in legal filings</p>
+        <h1 className="rise d2">
+          Every order where AI <em>met</em> the bench.
+        </h1>
+        <p className="lead rise d3">
+          A searchable record of {fmt(total)} U.S. court orders and opinions on AI use in legal
+          filings — judges sanctioning hallucinated citations, AI standing orders, disclosure rules,
+          and state-bar AI ethics opinions. Read the full text of each order, not just a summary.
+        </p>
+        <div className="cta-row rise d4">
+          <a href="/chat" className="btn">Chat with the dataset →</a>
+          <span className="hint">Ask in plain English — no setup, no key.</span>
+        </div>
 
-      <p style={{ margin: '20px 0' }}>
-        <a
-          href="/chat"
-          style={{
-            display: 'inline-block', padding: '10px 20px', fontSize: 16, fontWeight: 600,
-            background: '#06c', color: '#fff', borderRadius: 6, textDecoration: 'none',
-          }}
-        >
-          💬 Chat with the dataset →
-        </a>{' '}
-        <span style={{ color: '#666' }}>Ask in plain English — no setup.</span>
-      </p>
+        <div className="stats rise d5">
+          <div className="stat"><div className="num">{fmt(total)}</div><div className="lbl">orders &amp; opinions</div></div>
+          <div className="stat"><div className="num">{fmt(sanctions)}</div><div className="lbl">attorney sanctions</div></div>
+          <div className="stat"><div className="num">{fmt(withText)}</div><div className="lbl">with full text</div></div>
+          <div className="stat"><div className="num">{years}</div><div className="lbl">date range</div></div>
+        </div>
+      </section>
 
-      <h2>Connect your own assistant</h2>
-      <p>The same data, queryable from your own LLM client:</p>
-      <ul>
-        <li>
-          <strong>Claude</strong> (Desktop or claude.ai) — add a custom connector pointing at{' '}
-          <code>/api/mcp</code> (MCP).
-        </li>
-        <li>
-          <strong>ChatGPT</strong> — create a GPT → Actions → import <code>/openapi.json</code>.
-        </li>
-        <li>
-          <strong>Any LLM / code</strong> — call the REST endpoints, or use the OpenAPI spec for
-          function-calling.
-        </li>
-      </ul>
+      <section>
+        <div className="section-head">
+          <h2>Connect your own LLM</h2>
+          <p>Prefer your own assistant? Point it at the same tools. Pick your client and follow the steps — copy the URL, paste it in, done.</p>
+        </div>
+        <div className="guides">
+          <div className="guide">
+            <div className="guide-head">
+              <div className="title"><span className="tag">MCP</span><h3>Claude (Desktop &amp; claude.ai)</h3></div>
+              <a className="doc" href="https://claude.ai/settings/connectors" target="_blank" rel="noreferrer">Open connector settings</a>
+            </div>
+            <ol className="steps">
+              <li><div className="step-body">Open <strong>Settings → Connectors</strong> (claude.ai or the Claude desktop app), then click <strong>Add custom connector</strong>.</div></li>
+              <li><div className="step-body">Paste this MCP server URL and save:<div className="cf"><CopyField value={`${base}/api/mcp`} /></div></div></li>
+              <li><div className="step-body">Start a chat and ask, e.g. <em>“Which judges sanctioned attorneys for hallucinated AI citations?”</em> Claude will call the dataset tools automatically.</div></li>
+            </ol>
+          </div>
 
-      <h2>REST</h2>
-      <ul>
-        <li><code>/api/search?q=hallucinated&amp;consequence=sanctions_attorney</code></li>
-        <li><code>/api/list?court=sdny&amp;consequence=sanctions_attorney&amp;count=1</code></li>
-        <li><code>/api/record/&#123;id&#125;</code> · <code>/api/pdf/&#123;id&#125;</code></li>
-        <li><code>/api/facets?field=judge&amp;limit=20</code> · <code>/api/stats</code> · <code>/api/bar?state=California</code></li>
-      </ul>
+          <div className="guide">
+            <div className="guide-head">
+              <div className="title"><span className="tag">OpenAPI</span><h3>ChatGPT (custom GPT Actions)</h3></div>
+              <a className="doc" href="https://chatgpt.com/gpts/editor" target="_blank" rel="noreferrer">Open the GPT editor</a>
+            </div>
+            <ol className="steps">
+              <li><div className="step-body">In the GPT editor, go to <strong>Configure → Actions → Create new action</strong> (requires a paid ChatGPT plan).</div></li>
+              <li><div className="step-body">Choose <strong>Import from URL</strong> and paste this OpenAPI spec:<div className="cf"><CopyField value={`${base}/openapi.json`} /></div></div></li>
+              <li><div className="step-body">Save. The GPT can now query the dataset — ask it about AI court orders in plain English.</div></li>
+            </ol>
+          </div>
+
+          <div className="guide">
+            <div className="guide-head">
+              <div className="title"><span className="tag">REST</span><h3>Any LLM or code</h3></div>
+              <a className="doc" href="https://modelcontextprotocol.io" target="_blank" rel="noreferrer">About MCP</a>
+            </div>
+            <ol className="steps">
+              <li><div className="step-body">Hand the OpenAPI spec to your function-calling loop:<div className="cf"><CopyField value={`${base}/openapi.json`} /></div></div></li>
+              <li><div className="step-body">Or call the JSON endpoints directly — try it now:<div className="cf"><CopyField value={`curl "${base}/api/search?q=hallucinated&consequence=sanctions_attorney"`} display={`curl "${host}/api/search?q=hallucinated&consequence=sanctions_attorney"`} /></div></div></li>
+              <li><div className="step-body">Read a full order with <code className="inline">/api/text/&#123;id&#125;</code>. Full endpoint reference is below.</div></li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div className="section-head">
+          <h2>REST endpoints</h2>
+          <p>Read-only JSON. Click any line to copy.</p>
+        </div>
+        <div className="endpoints">
+          <CopyField value={`${base}/api/search?q=hallucinated&consequence=sanctions_attorney`} display="/api/search?q=hallucinated&consequence=sanctions_attorney" />
+          <CopyField value={`${base}/api/list?court=sdny&consequence=sanctions_attorney&count=1`} display="/api/list?court=sdny&consequence=sanctions_attorney&count=1" />
+          <CopyField value={`${base}/api/record/1`} display="/api/record/{id}" />
+          <CopyField value={`${base}/api/text/1`} display="/api/text/{id}  · full order text" />
+          <CopyField value={`${base}/api/facets?field=judge&limit=20`} display="/api/facets?field=judge&limit=20" />
+          <CopyField value={`${base}/api/stats`} display="/api/stats" />
+          <CopyField value={`${base}/api/bar?state=California`} display="/api/bar?state=California" />
+        </div>
+      </section>
+
+      <div className="foot">
+        <span>AI Court Orders · read-only dataset API</span>
+        <span><a href="/chat">Chat</a> · <a href="/openapi.json">OpenAPI</a> · <a href="/api/mcp">MCP</a></span>
+      </div>
     </main>
   );
 }

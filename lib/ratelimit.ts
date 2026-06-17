@@ -38,10 +38,15 @@ export function decideLimit(input: {
 }
 
 // ---- Upstash-backed path ----
+// Accepts both the native Upstash names (UPSTASH_REDIS_REST_*) and the Vercel
+// KV / Marketplace integration names (KV_REST_API_*), which point at the same
+// Upstash database depending on how it was connected.
 let redis: Redis | null | undefined;
 function getRedis(): Redis | null {
   if (redis !== undefined) return redis;
-  redis = process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN ? Redis.fromEnv() : null;
+  const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+  redis = url && token ? new Redis({ url, token }) : null;
   return redis;
 }
 
