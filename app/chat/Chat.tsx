@@ -56,7 +56,8 @@ export default function Chat() {
           <div key={m.id} className={`msg ${m.role === 'user' ? 'user' : 'assistant'}`}>
             <span className="who">{m.role === 'user' ? 'You' : 'Assistant'}</span>
             {m.parts.map((p, i) => {
-              if (p.type === 'text') return <span key={i} className="bubble">{p.text}</span>;
+              if (p.type === 'text') return p.text ? <span key={i} className="bubble">{p.text}</span> : null;
+              if (p.type === 'reasoning') return <span key={i} className="thinking">Thinking…</span>;
               if (p.type.startsWith('tool-')) {
                 return <span key={i} className="tool-step">{TOOL_LABELS[p.type] ?? p.type.replace('tool-', '')}…</span>;
               }
@@ -64,6 +65,13 @@ export default function Chat() {
             })}
           </div>
         ))}
+
+        {status === 'submitted' && (
+          <div className="msg assistant">
+            <span className="who">Assistant</span>
+            <span className="thinking">Thinking…</span>
+          </div>
+        )}
 
         {error && (
           <span className="err">

@@ -63,7 +63,10 @@ export async function POST(req: Request) {
     messages: convertToModelMessages(messages),
     tools: buildTools(),
     stopWhen: stepCountIs(6),
-    maxOutputTokens: 1500,
+    // Reasoning models spend part of the output budget on reasoning tokens; a
+    // low cap truncates complex answers (finishReason "length"), which reads as
+    // the assistant stopping mid-reply. Keep it generous but bounded.
+    maxOutputTokens: 4000,
     onFinish: ({ totalUsage }) => {
       if (totalUsage) console.info('[chat] tokens', totalUsage);
     },
