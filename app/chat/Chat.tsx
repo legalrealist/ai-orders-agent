@@ -15,10 +15,10 @@ const TOOL_LABELS: Record<string, string> = {
 };
 
 const STARTERS = [
-  'Which judges sanctioned attorneys for hallucinated citations?',
-  'How many standing orders require AI disclosure?',
-  'Summarize the most recent sanctions opinion.',
-  'What does the California bar say about AI use?',
+  'What sanctions did Judge Castel impose in Mata v. Avianca?',
+  'Summarize the AI sanctions against Mike Lindell’s lawyers in Coomer v. Lindell.',
+  'How many orders ended in attorney sanctions vs. just a warning?',
+  'What does California’s state bar require of attorneys using AI?',
 ];
 
 export default function Chat() {
