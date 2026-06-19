@@ -176,6 +176,9 @@ ol.steps li::before {
 .msg.assistant .bubble { background: var(--paper); border: 1px solid var(--line); border-bottom-left-radius: 5px; }
 .tool-step { font-size: 13px; color: var(--ink-faint); font-style: italic; }
 .tool-step::before { content: "›"; margin-right: 6px; color: var(--gold); font-style: normal; }
+.thinking { font-size: 13px; color: var(--ink-faint); font-style: italic; animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .thinking { animation: none; } }
 .err { color: var(--oxblood); font-size: 14px; }
 
 .chat-input { display: flex; gap: 10px; padding: 16px; border-top: 1px solid var(--line); background: var(--paper-2); }
