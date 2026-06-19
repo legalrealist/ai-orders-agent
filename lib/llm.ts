@@ -21,7 +21,12 @@ export function getModel(): LanguageModel {
   switch (PROVIDER) {
     case 'openrouter': {
       const openrouter = createOpenRouter({ apiKey: need('OPENROUTER_API_KEY') });
-      return openrouter(process.env.OPENROUTER_MODEL || 'deepseek/deepseek-v4-flash');
+      // Low reasoning effort: this is a grounded tool-calling task — answers come
+      // from the dataset tools, not the model's chain-of-thought — so heavy
+      // reasoning just adds latency and eats the output-token budget.
+      return openrouter(process.env.OPENROUTER_MODEL || 'deepseek/deepseek-v4-flash', {
+        reasoning: { effort: 'low' },
+      });
     }
     case 'anthropic': {
       const anthropic = createAnthropic({ apiKey: need('ANTHROPIC_API_KEY') });
