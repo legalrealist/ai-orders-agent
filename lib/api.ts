@@ -38,12 +38,19 @@ export async function opText(id: string | number, max?: number) {
   if (!rec) return { error: `no record with id ${id}` };
   const url = textUrl(rec.pdf ?? '');
   if (!url) return { id: rec.id, name: rec.name ?? '', text: '', note: 'no self-hosted document for this record' };
-  const res = await fetch(url, { headers: { 'User-Agent': 'ai-orders-agent' } });
+  let res: Response;
+  try {
+    res = await fetch(url, { headers: { 'User-Agent': 'ai-orders-agent' }, signal: AbortSignal.timeout(15_000) });
+  } catch {
+    return { id: rec.id, text_url: url, error: 'document text fetch timed out' };
+  }
   if (!res.ok) return { id: rec.id, text_url: url, error: `document text not available (${res.status})` };
-  let text = await res.text();
-  let truncated = false;
-  if (max && text.length > max) { text = text.slice(0, max); truncated = true; }
-  return { id: rec.id, name: rec.name ?? '', text_url: url, chars: text.length, truncated, text };
+  const full = await res.text();
+  const text = max && full.length > max ? full.slice(0, max) : full;
+  return {
+    id: rec.id, name: rec.name ?? '', text_url: url,
+    chars: text.length, total_chars: full.length, truncated: text.length < full.length, text,
+  };
 }
 
 export async function opFacets(field: string, limit?: number, all = false, filters: q.Filters = {}) {
